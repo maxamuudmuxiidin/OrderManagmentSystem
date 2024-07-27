@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Add/Edit Order</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/5.3/examples/checkout/form-validation.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .form-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand" href="/">Home</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/customers">Customers</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/orders">Orders</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/products">Products</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/reports">Reports</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container mt-3">
+    <div class="form-container">
+        <h2 th:text="${order.id != null} ? 'Edit Order' : 'New Order'">Order Form</h2>
+        <form th:action="@{${order.id != null} ? '/orders/edit/' + ${order.id} : '/orders'}" method="post" th:object="${order}" class="needs-validation" novalidate>
+            <div class="mb-3">
+                <label for="customerName" class="form-label">Customer Name</label>
+                <input type="text" class="form-control" id="customerName" th:field="*{customerName}" required>
+                <div th:if="${#fields.hasErrors('customerName')}" class="invalid-feedback" th:text="${#fields.errors('customerName')}"></div>
+            </div>
+            <div class="mb-3">
+                <label for="product" class="form-label">Product Name</label>
+                <select class="form-control" id="product" th:field="*{product.id}" required>
+                    <option th:each="product : ${products}" th:value="${product.id}" th:text="${product.name}" th:data-price="${product.price}" th:data-stock="${product.stock}"></option>
+                </select>
+                <div th:if="${#fields.hasErrors('product.id')}" class="invalid-feedback" th:text="${#fields.errors('product.id')}"></div>
+            </div>
+            <div class="mb-3">
+                <label for="quantity" class="form-label">Quantity</label>
+                <input type="number" class="form-control" id="quantity" th:field="*{quantity}" required>
+                <div id="quantityFeedback" class="invalid-feedback">Invalid quantity.</div>
+                <div th:if="${#fields.hasErrors('quantity')}" class="invalid-feedback" th:text="${#fields.errors('quantity')}"></div>
+            </div>
+            <div class="mb-3">
+                <label for="total" class="form-label">Total Amount</label>
+                <input type="number" class="form-control" id="total" th:field="*{total}" readonly>
+                <div th:if="${#fields.hasErrors('total')}" class="invalid-feedback" th:text="${#fields.errors('total')}"></div>
+            </div>
+            <div class="mb-3">
+                <label for="orderDate" class="form-label">Order Date</label>
+                <input type="datetime-local" class="form-control" id="orderDate" th:field="*{orderDate}" required>
+                <div th:if="${#fields.hasErrors('orderDate')}" class="invalid-feedback" th:text="${#fields.errors('orderDate')}"></div>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <a href="/orders" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+<div class="footer">
+    <p>&copy; 2024 Your Company. All rights reserved.</p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const quantityInput = document.getElementById("quantity");
+        const productSelect = document.getElementById("product");
+        const totalInput = document.getElementById("total");
+        const quantityFeedback = document.getElementById("quantityFeedback");
+
+        function calculateTotal() {
+            const quantity = parseFloat(quantityInput.value) || 0;
+            const selectedOption = productSelect.options[productSelect.selectedIndex];
+            const price = parseFloat(selectedOption.getAttribute("data-price")) || 0;
+            const stock = parseFloat(selectedOption.getAttribute("data-stock")) || 0;
+
+            if (quantity > stock) {
+                quantityFeedback.textContent = `Quantity exceeds available stock (${stock}).`;
+                quantityInput.classList.add("is-invalid");
+                return false;
+            } else {
+                quantityFeedback.textContent = "Invalid quantity.";
+                quantityInput.classList.remove("is-invalid");
+            }
+
+            const total = quantity * price;
+            totalInput.value = total.toFixed(2);
+            return true;
+        }
+
+        quantityInput.addEventListener("input", calculateTotal);
+        productSelect.addEventListener("change", calculateTotal);
+
+        // Initial calculation
+        calculateTotal();
+
+        var forms = document.querySelectorAll('.needs-validation');
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity() || !calculateTotal()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+
+                    form.classList.add('was-validated');
+                }, false);
+            });
+    });
+</script>
+</body>
+</html>

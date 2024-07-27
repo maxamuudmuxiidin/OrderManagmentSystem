@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Order Management System</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+
+        body {
+ background-color: #f8f9fa; /* Light grey background */
+}
+  .navbar {
+      background-color: #007bff !important; /* Bootstrap primary blue */
+  }
+  .navbar .navbar-nav .nav-link {
+      color: rgba(255, 255, 255, 0.75);
+  }
+  .navbar .navbar-nav .nav-link:hover,
+  .navbar .navbar-nav .nav-link:focus {
+      color: rgba(255, 255, 255, 1);
+  }
+  .navbar .navbar-nav .nav-link.active {
+      color: #ffffff !important;
+      background-color: #0056b3 !important; /* Bootstrap darker blue for active state */
+  }
+  .feature-icon {
+      font-size: 2rem;
+      color: #007bff; /* Bootstrap primary blue */
+  }
+  .feature-item {
+      text-align: center;
+      background-color: #ffffff;
+      border: 1px solid #007bff; /* Bootstrap primary blue */
+      padding: 20px;
+      border-radius: 10px;
+      margin: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .feature-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+  .footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #f8f9fa;
+      margin-top: 20px;
+      border-top: 1px solid #dee2e6;
+  }
+  .group-members-container {
+      margin-top: 20px;
+  }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/home">Home</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/customers">Customers</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/orders">Orders</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/products">Products</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/reports">Reports</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <h1>Welcome to the Order Management System</h1>
+    <p>Manage orders, customers, and products.</p>
+
+    <h2>Features</h2>
+    <div class="row">
+        <div class="col-md-3 feature-item">
+            <div class="d-flex flex-column align-items-center">
+                <i class="fas fa-users feature-icon"></i>
+                <h4 class="mt-3">Customer Management</h4>
+                <p>Manage your customers efficiently. Add, edit, and view customer details in one place.</p>
+                <a href="/customers" class="btn btn-primary mt-2">Go to Customers</a>
+            </div>
+        </div>
+        <div class="col-md-3 feature-item">
+            <div class="d-flex flex-column align-items-center">
+                <i class="fas fa-shopping-cart feature-icon"></i>
+                <h4 class="mt-3">Order Management</h4>
+                <p>Track and manage orders seamlessly. Create, update, and keep track of all orders easily.</p>
+                <a href="/orders" class="btn btn-primary mt-2">Go to Orders</a>
+            </div>
+        </div>
+        <div class="col-md-3 feature-item">
+            <div class="d-flex flex-column align-items-center">
+                <i class="fas fa-box-open feature-icon"></i>
+                <h4 class="mt-3">Product Management</h4>
+                <p>Maintain your product catalog. Add new products, update stock, and manage prices effortlessly.</p>
+                <a href="/products" class="btn btn-primary mt-2">Go to Products</a>
+            </div>
+        </div>
+        <div class="col-md-3 feature-item">
+            <div class="d-flex flex-column align-items-center">
+                <i class="fas fa-file-alt feature-icon"></i>
+                <h4 class="mt-3">Reports</h4>
+                <p>Generate and download various reports including customer, order, and product reports.</p>
+                <a href="/reports" class="btn btn-primary mt-2">Go to Reports</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="group-members-container">
+        <h2>Group A Members</h2>
+        <button id="toggleButton" class="btn btn-primary mb-3">
+            <i class="fas fa-eye"></i> Toggle Status
+        </button>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="status-row">
+                <td>C1210012</td>
+                <td>Abdifitah Mohamed Hirey</td>
+                <td><i class="fas fa-check text-success"></i></td>
+            </tr>
+            <tr class="status-row">
+                <td>C1210027</td>
+                <td>AbdiNajiib Mohamed Hasan</td>
+                <td><i class="fas fa-check text-success"></i></td>
+            </tr>
+            <tr class="status-row">
+                <td>C120249</td>
+                <td>Bashiir Mohamed Dahir</td>
+                <td><i class="fas fa-check text-success"></i></td>
+            </tr>
+            <tr class="status-row">
+                <td>C1210024</td>
+                <td>Hasan Abdikariim Ceymow</td>
+                <td><i class="fas fa-check text-success"></i></td>
+            </tr>
+            <tr class="status-row">
+                <td>C1210303</td>
+                <td>Abdiqani Dahir Abdulahi</td>
+                <td><i class="fas fa-check text-success"></i></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="footer">
+    <p>Group A Members CA211&copy; 2024</p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+<script>
+    document.getElementById('toggleButton').addEventListener('click', function() {
+        const rows = document.querySelectorAll('.status-row');
+        rows.forEach(row => {
+            row.style.display = row.style.display === 'none' ? '' : 'none';
+        });
+        const icon = this.querySelector('i');
+        icon.classList.toggle('fa-eye');
+        icon.classList.toggle('fa-eye-slash');
+    });
+</script>
+</body>
+</html>
